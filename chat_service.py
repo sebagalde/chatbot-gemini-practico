@@ -1,6 +1,6 @@
 from typing import Optional
-from config import Settings
-from roles import RolePreset, ROLES_SYSTEM_PROMPT
+from config import settings
+from roles import RolesPresent, ROLES_SYSTEM_PROMPT
 from prompts import build_system_prompt, collapse_history
 from memory import ConversationMemory
 from llmclient import GeminiClient
@@ -8,12 +8,12 @@ from llmclient import GeminiClient
 # Esta clase se encarga de gestionar la conversacion con el modelo
 class ChatService:
     # El rol por defecto es ASISTENTE
-    def __init__(self, role: RolePreset = RolePreset.ASISTENTE):
+    def __init__(self, role: RolesPresent = RolesPresent.ASISTENTE):
         self.role = role
-        self.memory = ConversationMemory(max_messages=Settings.max_history_messages)
+        self.memory = ConversationMemory(max_message=settings.max_history)
         self.client = GeminiClient(
-            api_key=Settings.api_key,
-            model_name=Settings.model
+            api_key=settings.api_key,
+            model_name=settings.model
         )
 
     # Esta funcion ask hace la pregunta al modelo y guarda el contexto
@@ -30,8 +30,8 @@ class ChatService:
             system_prompt=system_prompt,
             history=history,
             user_message=prompt,
-            max_retries=Settings.max_retries,
-            timeout_seconds=Settings.timeout_seconds
+            max_retries=settings.max_retries,
+            timeout_seconds=settings.timeout
         )
 
         # Actualizar la memoria con el nuevo mensaje y la respuesta del modelo
@@ -39,6 +39,10 @@ class ChatService:
         self.memory.add_model(response_text)
 
         return response_text
+
+    def set_role(self, role: RolesPresent):
+        """Cambia el rol del ChatService"""
+        self.role = role
 
     def reset(self):
         self.memory.clear()

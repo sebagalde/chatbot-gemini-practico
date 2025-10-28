@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from api.schemas import ChatRequest, ChatResponse
-
+from chat_service import ChatService
+from roles import RolesPresent
 router = APIRouter()
 
-chat_service = ChatService(role=RolePresets.ASISTENTE)
+chat_service = ChatService(role=RolesPresent.ASISTENTE)
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
@@ -14,7 +15,7 @@ async def chat_endpoint(request: ChatRequest):
 
     rol_lower = request.role.lower()
     try:
-        chat_service.set_role(RolePreset(rol_lower))
+        chat_service.set_role(RolesPresent(rol_lower))
     except ValueError:
         raise HTTPException(status_code=400, detail=f"Rol desconocido: {request.role}")
     

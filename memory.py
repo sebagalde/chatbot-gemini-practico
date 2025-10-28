@@ -9,7 +9,11 @@ class ConversationMemory:
         self.memory.append({"role": "user", "content": content})
 
     def add_model(self, content: str):
-        self.memorymappend({"role": "model", "content": content})
+        self.memory.append({"role": "model", "content": content})
+
+    def add_user_message(self, content: str):
+        """Alias para add_user para compatibilidad"""
+        self.add_user(content)
 
     def get(self) -> List[Dict[str,str]]:
         return list(self.memory)

@@ -1,9 +1,9 @@
 from enum import Enum
 
 class RolesPresent(Enum):
-    PROFESOR = "profesor",
-    TRADUCTOR = "traductor",
-    PROGRAMADOR = "programador",
+    PROFESOR = "profesor"
+    TRADUCTOR = "traductor"
+    PROGRAMADOR = "programador"
     ASISTENTE = "asistente"
 
 ROLES_SYSTEM_PROMPT = {
